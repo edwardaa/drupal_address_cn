@@ -1,0 +1,7 @@
+query addressSubdivisions($parents: [String] = ["CN"]) {
+  addressSubdivisions (parents: $parents) {
+    code
+    name
+    hasChildren
+  }
+}

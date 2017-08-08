@@ -1,0 +1,18 @@
+query ($path: String!) {
+  route(path: $path) {
+    node: entity {
+      entityLabel
+      ... on NodeTest {
+        testAddress {
+          countryCode
+          contact
+          province
+          city
+          district
+          postCode
+          streetAddress
+        }
+      }
+    }
+  }
+}
