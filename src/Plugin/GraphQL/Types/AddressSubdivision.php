@@ -11,7 +11,6 @@ use Drupal\graphql_core\GraphQL\TypePluginBase;
  *   id = "address_subdivision",
  *   name = "AddressSubdivision"
  * )
- *
  */
 class AddressSubdivision extends TypePluginBase {
 

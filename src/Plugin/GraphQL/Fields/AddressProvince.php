@@ -12,7 +12,7 @@ use Youshido\GraphQL\Execution\ResolveInfo;
  * @GraphQLField(
  *   id = "address_province",
  *   name = "province",
- *   type = "String",
+ *   type = "AddressSubdivision",
  *   types = { "Address" }
  * )
  */

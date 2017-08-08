@@ -6,13 +6,25 @@ query ($path: String!) {
         testAddress {
           countryCode
           contact
-          province
-          city
-          district
+          province {
+            ...Subdivision
+          }
+          city {
+            ...Subdivision
+          }
+          district {
+            ...Subdivision
+          }
           postCode
           streetAddress
         }
       }
     }
   }
+}
+
+fragment Subdivision on AddressSubdivision {
+  code
+  name
+  hasChildren
 }

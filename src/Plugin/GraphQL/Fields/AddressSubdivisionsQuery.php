@@ -3,6 +3,7 @@
 namespace Drupal\address_cn\Plugin\GraphQL\Fields;
 
 use CommerceGuys\Addressing\Subdivision\SubdivisionRepositoryInterface;
+use Drupal\address_cn\AddressCnManagerInterface;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\graphql_core\GraphQL\FieldPluginBase;
@@ -68,10 +69,10 @@ class AddressSubdivisionsQuery extends FieldPluginBase implements ContainerFacto
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $pluginId, $pluginDefinition, SubdivisionRepositoryInterface $subdivision_repository, $address_cn_manager) {
+  public function __construct(array $configuration, $pluginId, $pluginDefinition, SubdivisionRepositoryInterface $subdivision_repository, AddressCnManagerInterface $address_cn_manager) {
+    parent::__construct($configuration, $pluginId, $pluginDefinition);
     $this->subdivisionRepository = $subdivision_repository;
     $this->addressCnManager = $address_cn_manager;
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
 
   /**

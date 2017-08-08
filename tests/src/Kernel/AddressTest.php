@@ -185,8 +185,16 @@ class AddressTest extends GraphQLFileTestBase {
     $this->assertEquals([
       'countryCode' => 'CN',
       'contact' => 'Ma yun',
-      'province' => '北京市',
-      'city' => '昌平区',
+      'province' => [
+        'code' => 'Beijing Shi',
+        'name' => '北京市',
+        'hasChildren' => TRUE,
+      ],
+      'city' => [
+        'code' => 'Changping Qu',
+        'name' => '昌平区',
+        'hasChildren' => FALSE,
+      ],
       'district' => NULL,
       'postCode' => '100000',
       'streetAddress' => 'Wang fu jing',
@@ -217,9 +225,21 @@ class AddressTest extends GraphQLFileTestBase {
     $this->assertEquals([
       'countryCode' => 'CN',
       'contact' => 'Ma yun',
-      'province' => 'Guangdong Sheng',
-      'city' => 'Shenzhen Shi',
-      'district' => 'Bao\'an Qu',
+      'province' => [
+        'code' => 'Guangdong Sheng',
+        'name' => 'Guangdong Sheng',
+        'hasChildren' => TRUE,
+      ],
+      'city' => [
+        'code' => 'Shenzhen Shi',
+        'name' => 'Shenzhen Shi',
+        'hasChildren' => TRUE,
+      ],
+      'district' => [
+        'code' => 'Bao\'an Qu',
+        'name' => 'Bao\'an Qu',
+        'hasChildren' => FALSE,
+      ],
       'postCode' => '518000',
       'streetAddress' => 'Xinan road, ZhongLi startup center',
     ], $address, 'Address resolved properly');
@@ -236,9 +256,21 @@ class AddressTest extends GraphQLFileTestBase {
     $this->assertEquals([
       'countryCode' => 'CN',
       'contact' => 'Ma yun',
-      'province' => '广东省',
-      'city' => '深圳市',
-      'district' => '宝安区',
+      'province' => [
+        'code' => 'Guangdong Sheng',
+        'name' => '广东省',
+        'hasChildren' => TRUE,
+      ],
+      'city' => [
+        'code' => 'Shenzhen Shi',
+        'name' => '深圳市',
+        'hasChildren' => TRUE,
+      ],
+      'district' => [
+        'code' => 'Bao\'an Qu',
+        'name' => '宝安区',
+        'hasChildren' => FALSE,
+      ],
       'postCode' => '518000',
       'streetAddress' => 'Xinan road, ZhongLi startup center',
     ], $address, 'Address resolved properly');
@@ -256,9 +288,21 @@ class AddressTest extends GraphQLFileTestBase {
     $this->assertEquals([
       'countryCode' => 'CN',
       'contact' => 'Ma yun',
-      'province' => '广东省',
-      'city' => 'Shenzhen',
-      'district' => 'Bao\'an Qu',
+      'province' => [
+        'code' => 'Guangdong Sheng',
+        'name' => '广东省',
+        'hasChildren' => TRUE,
+      ],
+      'city' => [
+        'code' => 'Shenzhen',
+        'name' => 'Shenzhen',
+        'hasChildren' => FALSE,
+      ],
+      'district' => [
+        'code' => 'Bao\'an Qu',
+        'name' => 'Bao\'an Qu',
+        'hasChildren' => FALSE,
+      ],
       'postCode' => '518000',
       'streetAddress' => 'Xinan road, ZhongLi startup center',
     ], $address, 'Address resolved properly');

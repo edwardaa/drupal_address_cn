@@ -4,6 +4,7 @@ namespace Drupal\address_cn\Plugin\GraphQL\Fields;
 
 use CommerceGuys\Addressing\LocaleHelper;
 use CommerceGuys\Addressing\Subdivision\SubdivisionRepositoryInterface;
+use Drupal\address_cn\AddressCnManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\graphql_core\GraphQL\FieldPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -21,11 +22,19 @@ abstract class AddressSubdivisionFieldBase extends FieldPluginBase implements Co
   protected $subdivisionRepository;
 
   /**
+   * The address cn manager.
+   *
+   * @var \Drupal\address_cn\AddressCnManagerInterface
+   */
+  protected $addressCnManager;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $pluginId, $pluginDefinition, SubdivisionRepositoryInterface $subdivision_repository) {
+  public function __construct(array $configuration, $pluginId, $pluginDefinition, SubdivisionRepositoryInterface $subdivision_repository, AddressCnManagerInterface $address_cn_manager) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
     $this->subdivisionRepository = $subdivision_repository;
+    $this->addressCnManager = $address_cn_manager;
   }
 
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
@@ -33,20 +42,23 @@ abstract class AddressSubdivisionFieldBase extends FieldPluginBase implements Co
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('address.subdivision_repository')
+      $container->get('address.subdivision_repository'),
+      $container->get('address_cn.manager')
     );
   }
 
   /**
+   * Resolves subdivision.
+   *
    * @param string $code
    *   The subdivision code
    * @param array $parents
    *   The parents (country code, subdivision codes).
-   * @param $locale
+   * @param string $locale
    *   The locale.
    *
-   * @return string
-   *   The local name of the subdivision if it exists, code otherwise.
+   * @return array
+   *   An array of properties of subdivision.
    */
   protected function resolveSubdivision($code, array $parents, $locale) {
     $subdivision = $this->subdivisionRepository->get($code, $parents);
@@ -60,10 +72,21 @@ abstract class AddressSubdivisionFieldBase extends FieldPluginBase implements Co
       // 	 "iso_code": "CN-45",
       // 	 "has_children": true
       // },
-      return $use_local_name ? $subdivision->getLocalName() : $subdivision->getName();
+      $name = $use_local_name ? $subdivision->getLocalName() : $subdivision->getName();
+      $has_children = $this->addressCnManager->hasChildren($code, $parents);
+      return [
+        'code' => $code,
+        'name' => $name,
+        'has_children' => $has_children,
+      ];
     }
-    // Fall back to code
-    return $code;
+    // Fall back to code.
+    return [
+      'code' => $code,
+      'name' => $code,
+      // The unknown children maybe due invalid code or parents.
+      'has_children' => FALSE,
+    ];
   }
 
 }
